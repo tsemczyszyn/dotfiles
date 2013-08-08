@@ -1,0 +1,109 @@
+set from = "tsemczyszyn@sangoma.com"
+set realname = "Travis Semczyszyn"
+
+set header_cache =~/.mutt/cache/headers
+set message_cachedir =~/.mutt/cache/bodies
+set certificate_file =~/.mutt/certificates
+set signature="~/.mutt/.signature"
+set sig_on_top=yes
+set print_command="muttprint"
+set query_command="~/.mutt/mutt-ldap.pl %s"
+set smtp_url = "smtps://tsemczyszyn@sangoma.com@secure.emailsrvr.com:465/"
+
+#Regarding fetching mail (IMAP)
+#set imap_user = "tsemczyszyn@sangoma.com"
+#set folder = "imaps://secure.emailsrvr.com:993"
+#set spoolfile = "+INBOX"
+#set record="+INBOX/Sent"
+#mailboxes "=INBOX"
+#set imap_check_subscribed
+#unset imap_passive
+#set imap_keepalive = 300
+
+#Regarding fetching mail (Maildir OfflineIMAP)
+source ~/Mail/muttrc.mailboxes
+set mbox_type   = Maildir
+#
+set folder      = ~/Mail/SangomaLocal
+set spoolfile   = "+INBOX"
+set mbox        = "+INBOX"
+
+set postponed   = "+INBOX.Drafts"
+set record      = "+INBOX.Sent"
+#
+
+#Reading
+set timeout=10  
+set mail_check=5
+set sort=threads
+set sort_aux=date
+set move=no     
+set mark_old=no
+
+set mailcap_path="~/.mailcap"
+auto_view text/html # auto-render html inline mutt
+auto_view text/calendar # auto-render calendar invites
+
+#Sven's Draconian Header Weeding
+ignore *
+unignore from date subject to cc
+unignore organization organisation x-mailer: x-newsreader: x-mailing-list:
+unignore posted-to:
+unignore Message-Id
+unignore Content-Type
+
+set imap_check_subscribed
+set sort     = threads
+set sort_aux = last-date-received
+
+
+
+source ~/.mutt/colours
+
+set index_format = "%3N %4C %Z %{%b %d} %-15.15F (%4c) %?M?%M> ?%s"
+set quote_regexp = "^([ \t]*[>])+"
+
+set smart_wrap
+set pager_index_lines = 8
+
+set abort_nosubject  = no
+set abort_unmodified = yes
+set quit             = yes
+set postpone         = ask-no
+set delete           = yes
+set move             = no
+unset collapse_unread
+
+bind pager j  next-line
+bind pager k  previous-line
+bind pager gg top
+bind pager G  bottom
+bind pager J  next-undeleted
+bind pager K  previous-undeleted
+bind pager R  group-reply
+bind generic /  search-opposite
+
+bind index gg first-entry
+bind index G  last-entry
+bind index R  group-reply
+bind index -  collapse-thread
+bind index _  collapse-all
+
+bind editor <space> noop
+macro index M "T~N<enter>;WNT~O<enter>;WO\CT~A<enter>" "Mark all messages read"
+macro index <F7> "<shell-escape>mu find --format=links --clearlinks --linksdir=~/.mu/results "    "mu find"
+macro index <F8> "<change-folder-readonly>~/.mu/results\n"       "display mu find results"
+
+set allow_ansi
+auto_view text/x-patch
+alternative_order text/calendar text/plain text/html *
+
+#Compensate for M$ crap
+charset-hook ^iso-8859-1$ windows-1252
+color body red default "need to.+?\."
+color body red default "(please|Please)"
+color body red default "(Can you|can you)"
+color body red default "(ould you|ould you)"
+
+set beep_new
+alias ethan Ethan Banks <ethan@prostarcomm.com>
